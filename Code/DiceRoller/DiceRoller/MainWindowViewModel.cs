@@ -31,20 +31,7 @@ namespace DiceRoller
         #region Public Methods
         #endregion
 
-        #region Private Methods
-        private void IncreaseDiceNumber(object parameters)
-        {
-            string selectedDice = (string)parameters;
-            switch (selectedDice.ToLower())
-            {
-                case "d4":
-                    D4Number++;
-                    break;
-                default:
-                    throw new Exception($"Invalid dice: {selectedDice}.");
-            }
-        }
-
+        #region Command Support
         private void DecreaseDiceNumber(object parameters)
         {
             string selectedDice = (string)parameters;
@@ -57,6 +44,23 @@ namespace DiceRoller
                     throw new Exception($"Invalid dice: {selectedDice}.");
             }
         }
+
+        private void IncreaseDiceNumber(object parameters)
+        {
+            string selectedDice = (string)parameters;
+            switch (selectedDice.ToLower())
+            {
+                case "d4":
+                    D4Number++;
+                    break;
+                default:
+                    throw new Exception($"Invalid dice: {selectedDice}.");
+            }
+        }
+        #endregion
+
+        #region Private Methods
+
         #endregion
 
         #region INotifyPropertyChanged Support

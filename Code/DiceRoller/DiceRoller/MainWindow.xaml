@@ -3,13 +3,27 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DiceRoller"
+        xmlns:vm="clr-namespace:DiceRoller"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <Style TargetType="Button" BasedOn="{StaticResource MahApps.Styles.Button}">
+            <Setter Property="FontSize" Value="40"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style TargetType="TextBox" BasedOn="{StaticResource MahApps.Styles.TextBox}">
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>
-            <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -17,10 +31,26 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+        <TextBox Grid.Row="0"
+                 Grid.Column="0"
+                 FontSize="20"
+                 FontWeight="Light"
+                 FontStyle="Italic"
+                 IsReadOnly="True"
+                 Text="D4"/>
         <Button Grid.Row="0"
-                Grid.Column="0"
+                Grid.Column="1"
+                Content="-"
+                Command="{Binding DecreaseDiceCommand}"
+                CommandParameter="d4"/>
+        <TextBox Grid.Row="0"
+                 Grid.Column="2"
+                 IsReadOnly="True"
+                 Text="{Binding D4Number}"/>
+        <Button Grid.Row="0"
+                Grid.Column="3"
                 Content="+"
-                FontWeight="Bold"
-                FontSize="40"/>
+                Command="{Binding IncreaseDiceCommand}"
+                CommandParameter="d4"/>
     </Grid>
 </Window>

@@ -18,6 +18,9 @@ namespace DiceRoller
         private int _d12Number;
         private int _d20Number;
         private int _d100Number;
+        private string _result;
+        private List<string> _extractions;
+        private Random _r;
         #endregion
 
         #region Public Members
@@ -28,15 +31,21 @@ namespace DiceRoller
         public int D12Number { get => _d12Number; set { if (value == _d12Number) return; _d12Number = value;  OnPropertyChanged(); } }
         public int D20Number { get => _d20Number; set { if (value == _d20Number) return; _d20Number = value;  OnPropertyChanged(); } }
         public int D100Number { get => _d100Number; set { if (value == _d100Number) return; _d100Number = value;  OnPropertyChanged(); } }
+        public string Result { get => _result; set { if (value == _result) return; _result = value;  OnPropertyChanged(); } }
         public ICommand DecreaseDiceCommand { get; set; }
         public ICommand IncreaseDiceCommand { get; set; }
+        public ICommand RollCommand { get; set; }
         #endregion
 
         #region Constructor
         public MainWindowViewModel()
         {
+            _r = new Random();
+            _extractions = new List<string>();
             DecreaseDiceCommand = new RelayCommand(DecreaseDiceNumber);
             IncreaseDiceCommand = new RelayCommand(IncreaseDiceNumber);
+            RollCommand = new RelayCommand(Roll);
+            Result = "No result.";
         }
         #endregion
 
@@ -68,10 +77,15 @@ namespace DiceRoller
             static int increaseDice(int currentValue) => currentValue + 1;
             ModifyDiceNumber(selectedDice, increaseDice);
         }
+
+        private void Roll(object parameters)
+        {
+            Result = DateTime.Now.ToLongTimeString();
+            RollDice();
+        }
         #endregion
 
         #region Private Methods
-
         private void ModifyDiceNumber(string die, Func<int, int> function)
         {
             switch (die.ToLower())
@@ -99,6 +113,33 @@ namespace DiceRoller
                     break;
                 default:
                     throw new Exception($"Invalid dice: {die}.");
+            }
+        }
+
+        private void RollDice()
+        {
+            _extractions.Clear();
+            var items = new List<Tuple<int, int>>()
+            {
+                new Tuple<int, int>(D4Number, 4),
+                new Tuple<int, int>(D6Number, 6),
+                new Tuple<int, int>(D8Number, 8),
+                new Tuple<int, int>(D10Number, 10),
+                new Tuple<int, int>(D12Number, 12),
+                new Tuple<int, int>(D20Number, 20),
+                new Tuple<int, int>(D100Number, 100),
+            };
+            foreach (var item in items)
+            {
+                RollDie(item.Item1, item.Item2, ref _extractions);
+            }
+        }
+
+        private void RollDie(int numberOfRolls, int maxValue, ref List<string> extractions)
+        {
+            for (int i = 0; i < numberOfRolls; i++)
+            {
+                extractions.Add(_r.Next(1, maxValue).ToString());
             }
         }
         #endregion

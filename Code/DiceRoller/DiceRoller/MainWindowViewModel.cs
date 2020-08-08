@@ -12,10 +12,12 @@ namespace DiceRoller
     {
         #region Private Members
         private int _d4Number;
+        private int _d6Number;
         #endregion
 
         #region Public Members
         public int D4Number { get => _d4Number; set { if (value == _d4Number) return; _d4Number = value;  OnPropertyChanged(); } }
+        public int D6Number { get => _d6Number; set { if (value == _d6Number) return; _d6Number = value;  OnPropertyChanged(); } }
         public ICommand DecreaseDiceCommand { get; set; }
         public ICommand IncreaseDiceCommand { get; set; }
         #endregion
@@ -35,32 +37,33 @@ namespace DiceRoller
         private void DecreaseDiceNumber(object parameters)
         {
             string selectedDice = (string)parameters;
-            switch (selectedDice.ToLower())
-            {
-                case "d4":
-                    D4Number--;
-                    break;
-                default:
-                    throw new Exception($"Invalid dice: {selectedDice}.");
-            }
+            static int decreaseDice(int currentValue) => currentValue - 1;
+            ModifyDiceNumber(selectedDice, decreaseDice);
         }
 
         private void IncreaseDiceNumber(object parameters)
         {
             string selectedDice = (string)parameters;
-            switch (selectedDice.ToLower())
-            {
-                case "d4":
-                    D4Number++;
-                    break;
-                default:
-                    throw new Exception($"Invalid dice: {selectedDice}.");
-            }
+            static int increaseDice(int currentValue) => currentValue + 1;
+            ModifyDiceNumber(selectedDice, increaseDice);
         }
         #endregion
 
         #region Private Methods
-
+        private void ModifyDiceNumber(string die, Func<int, int> function)
+        {
+            switch (die.ToLower())
+            {
+                case "d4":
+                    D4Number = function(D4Number);
+                    break;
+                case "d6":
+                    D6Number = function(D6Number);
+                    break;
+                default:
+                    throw new Exception($"Invalid dice: {die}.");
+            }
+        }
         #endregion
 
         #region INotifyPropertyChanged Support

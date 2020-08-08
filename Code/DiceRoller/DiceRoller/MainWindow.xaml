@@ -193,12 +193,18 @@
                 CommandParameter="d100"/>
         <Button Grid.Row="7"
                 Grid.Column="0"
-                Grid.ColumnSpan="4"
+                Grid.ColumnSpan="3"
                 Content="Roll"
                 Command="{Binding RollCommand}"/>
+        <Button Grid.Row="7"
+                Grid.Column="4"
+                Content="Reset"
+                Command="{Binding ResetCommand}"/>
         <TextBox Grid.Row="8"
                  Grid.Column="0"
                  Grid.ColumnSpan="4"
+                 FontSize="16"
+                 FontWeight="Normal"
                  Text="{Binding Result}"
                  VerticalScrollBarVisibility="Auto"/>
     </Grid>

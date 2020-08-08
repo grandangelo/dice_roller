@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Input;
@@ -18,6 +19,7 @@ namespace DiceRoller
         private int _d12Number;
         private int _d20Number;
         private int _d100Number;
+        private int _totalSum;
         private string _result;
         private List<string> _extractions;
         private Random _r;
@@ -34,6 +36,7 @@ namespace DiceRoller
         public string Result { get => _result; set { if (value == _result) return; _result = value;  OnPropertyChanged(); } }
         public ICommand DecreaseDiceCommand { get; set; }
         public ICommand IncreaseDiceCommand { get; set; }
+        public ICommand ResetCommand { get; set; }
         public ICommand RollCommand { get; set; }
         #endregion
 
@@ -44,6 +47,7 @@ namespace DiceRoller
             _extractions = new List<string>();
             DecreaseDiceCommand = new RelayCommand(DecreaseDiceNumber);
             IncreaseDiceCommand = new RelayCommand(IncreaseDiceNumber);
+            ResetCommand = new RelayCommand(Reset);
             RollCommand = new RelayCommand(Roll);
             Result = "No result.";
         }
@@ -78,10 +82,30 @@ namespace DiceRoller
             ModifyDiceNumber(selectedDice, increaseDice);
         }
 
+        private void Reset(object parameters)
+        {
+            D4Number = 0;
+            D6Number = 0;
+            D8Number = 0;
+            D10Number = 0;
+            D12Number = 0;
+            D20Number = 0;
+            D100Number = 0;
+        }
+
         private void Roll(object parameters)
         {
-            Result = DateTime.Now.ToLongTimeString();
+            _totalSum = 0;
             RollDice();
+            if (_extractions.Count != 0)
+            {
+                Result = string.Join(Environment.NewLine, _extractions);
+                Result += $"{Environment.NewLine}Total sum: {_totalSum}.";
+            }
+            else
+            {
+                Result = "No result.";
+            }
         }
         #endregion
 
@@ -137,9 +161,15 @@ namespace DiceRoller
 
         private void RollDie(int numberOfRolls, int maxValue, ref List<string> extractions)
         {
+            List<int> dieRoll = new List<int>();
             for (int i = 0; i < numberOfRolls; i++)
             {
-                extractions.Add(_r.Next(1, maxValue).ToString());
+                dieRoll.Add(_r.Next(1, maxValue + 1));
+            }
+            if (dieRoll.Count != 0)
+            {
+                extractions.Add($"D{maxValue}: {string.Join(", ", dieRoll)}. Sum {dieRoll.Sum()}");
+                _totalSum += dieRoll.Sum();
             }
         }
         #endregion

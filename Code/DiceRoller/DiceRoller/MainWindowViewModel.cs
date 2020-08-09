@@ -1,6 +1,7 @@
 ﻿using DiceRoller.Support;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -22,6 +23,7 @@ namespace DiceRoller
         private int _totalSum;
         private string _result;
         private List<string> _extractions;
+        private ObservableCollection<Die> _dice;
         private Random _r;
         #endregion
 
@@ -34,6 +36,7 @@ namespace DiceRoller
         public int D20Number { get => _d20Number; set { if (value == _d20Number) return; _d20Number = value;  OnPropertyChanged(); } }
         public int D100Number { get => _d100Number; set { if (value == _d100Number) return; _d100Number = value;  OnPropertyChanged(); } }
         public string Result { get => _result; set { if (value == _result) return; _result = value;  OnPropertyChanged(); } }
+        public ObservableCollection<Die> Dice { get => _dice; set { if (value == _dice) return; _dice = value; OnPropertyChanged(); } }
         public ICommand DecreaseDiceCommand { get; set; }
         public ICommand IncreaseDiceCommand { get; set; }
         public ICommand ResetCommand { get; set; }
@@ -45,6 +48,16 @@ namespace DiceRoller
         {
             _r = new Random();
             _extractions = new List<string>();
+            Dice = new ObservableCollection<Die>()
+            {
+                new Die(4, "D4"),
+                new Die(6, "D6"),
+                new Die(8, "D8"),
+                new Die(10, "D10"),
+                new Die(12, "D12"),
+                new Die(20, "D20"),
+                new Die(100, "D100"),
+            };
             DecreaseDiceCommand = new RelayCommand(DecreaseDiceNumber);
             IncreaseDiceCommand = new RelayCommand(IncreaseDiceNumber);
             ResetCommand = new RelayCommand(Reset);
@@ -115,25 +128,25 @@ namespace DiceRoller
             switch (die.ToLower())
             {
                 case "d4":
-                    D4Number = function(D4Number);
+                    Dice.GetDie(4).NumberOfRolls = function(Dice.GetDie(4).NumberOfRolls);
                     break;
                 case "d6":
-                    D6Number = function(D6Number);
+                    Dice.GetDie(6).NumberOfRolls = function(Dice.GetDie(6).NumberOfRolls);
                     break;
                 case "d8":
-                    D8Number = function(D8Number);
+                    Dice.GetDie(8).NumberOfRolls = function(Dice.GetDie(8).NumberOfRolls);
                     break;
                 case "d10":
-                    D10Number = function(D10Number);
+                    Dice.GetDie(10).NumberOfRolls = function(Dice.GetDie(10).NumberOfRolls);
                     break;
                 case "d12":
-                    D12Number = function(D12Number);
+                    Dice.GetDie(12).NumberOfRolls = function(Dice.GetDie(12).NumberOfRolls);
                     break;
                 case "d20":
-                    D20Number = function(D20Number);
+                    Dice.GetDie(20).NumberOfRolls = function(Dice.GetDie(20).NumberOfRolls);
                     break;
                 case "d100":
-                    D100Number = function(D100Number);
+                    Dice.GetDie(100).NumberOfRolls = function(Dice.GetDie(100).NumberOfRolls);
                     break;
                 default:
                     throw new Exception($"Invalid dice: {die}.");
@@ -182,5 +195,13 @@ namespace DiceRoller
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
+    }
+
+    public static class Extensions
+    {
+        public static Die GetDie(this ObservableCollection<Die> dice, int maxValue)
+        {
+            return dice.Single(dice => dice.MaxDieValue == maxValue);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MahApps.Metro.Controls;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -19,6 +20,7 @@ namespace DiceRoller.Support
         public int MaxDieValue { get; private set; }
         public int Modifier { get => _modifier; set { if (value == _modifier) return; _modifier = value; OnPropertyChanged(); } }
         public int NumberOfRolls { get => _numberOfRolls; set { if (value == _numberOfRolls) return; _numberOfRolls = value; OnPropertyChanged(); } }
+        public string MaxDieValueString { get => MaxDieValue.ToString(); }
         public string Name { get; private set; }
         #endregion
 

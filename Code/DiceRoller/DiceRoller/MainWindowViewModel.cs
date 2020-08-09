@@ -13,13 +13,6 @@ namespace DiceRoller
     public class MainWindowViewModel : INotifyPropertyChanged
     {
         #region Private Members
-        private int _d4Number;
-        private int _d6Number;
-        private int _d8Number;
-        private int _d10Number;
-        private int _d12Number;
-        private int _d20Number;
-        private int _d100Number;
         private int _totalSum;
         private string _result;
         private List<string> _extractions;
@@ -28,13 +21,6 @@ namespace DiceRoller
         #endregion
 
         #region Public Members
-        public int D4Number { get => _d4Number; set { if (value == _d4Number) return; _d4Number = value;  OnPropertyChanged(); } }
-        public int D6Number { get => _d6Number; set { if (value == _d6Number) return; _d6Number = value;  OnPropertyChanged(); } }
-        public int D8Number { get => _d8Number; set { if (value == _d8Number) return; _d8Number = value;  OnPropertyChanged(); } }
-        public int D10Number { get => _d10Number; set { if (value == _d10Number) return; _d10Number = value;  OnPropertyChanged(); } }
-        public int D12Number { get => _d12Number; set { if (value == _d12Number) return; _d12Number = value;  OnPropertyChanged(); } }
-        public int D20Number { get => _d20Number; set { if (value == _d20Number) return; _d20Number = value;  OnPropertyChanged(); } }
-        public int D100Number { get => _d100Number; set { if (value == _d100Number) return; _d100Number = value;  OnPropertyChanged(); } }
         public string Result { get => _result; set { if (value == _result) return; _result = value;  OnPropertyChanged(); } }
         public ObservableCollection<Die> Dice { get => _dice; set { if (value == _dice) return; _dice = value; OnPropertyChanged(); } }
         public ICommand DecreaseDiceCommand { get; set; }
@@ -97,13 +83,10 @@ namespace DiceRoller
 
         private void Reset(object parameters)
         {
-            D4Number = 0;
-            D6Number = 0;
-            D8Number = 0;
-            D10Number = 0;
-            D12Number = 0;
-            D20Number = 0;
-            D100Number = 0;
+            foreach (var die in Dice)
+            {
+                die.NumberOfRolls = 0;
+            }
         }
 
         private void Roll(object parameters)
@@ -127,25 +110,25 @@ namespace DiceRoller
         {
             switch (die.ToLower())
             {
-                case "d4":
+                case "4":
                     Dice.GetDie(4).NumberOfRolls = function(Dice.GetDie(4).NumberOfRolls);
                     break;
-                case "d6":
+                case "6":
                     Dice.GetDie(6).NumberOfRolls = function(Dice.GetDie(6).NumberOfRolls);
                     break;
-                case "d8":
+                case "8":
                     Dice.GetDie(8).NumberOfRolls = function(Dice.GetDie(8).NumberOfRolls);
                     break;
-                case "d10":
+                case "10":
                     Dice.GetDie(10).NumberOfRolls = function(Dice.GetDie(10).NumberOfRolls);
                     break;
-                case "d12":
+                case "12":
                     Dice.GetDie(12).NumberOfRolls = function(Dice.GetDie(12).NumberOfRolls);
                     break;
-                case "d20":
+                case "20":
                     Dice.GetDie(20).NumberOfRolls = function(Dice.GetDie(20).NumberOfRolls);
                     break;
-                case "d100":
+                case "100":
                     Dice.GetDie(100).NumberOfRolls = function(Dice.GetDie(100).NumberOfRolls);
                     break;
                 default:
@@ -158,13 +141,13 @@ namespace DiceRoller
             _extractions.Clear();
             var items = new List<Tuple<int, int>>()
             {
-                new Tuple<int, int>(D4Number, 4),
-                new Tuple<int, int>(D6Number, 6),
-                new Tuple<int, int>(D8Number, 8),
-                new Tuple<int, int>(D10Number, 10),
-                new Tuple<int, int>(D12Number, 12),
-                new Tuple<int, int>(D20Number, 20),
-                new Tuple<int, int>(D100Number, 100),
+                new Tuple<int, int>(Dice.GetDie(4).NumberOfRolls, 4),
+                new Tuple<int, int>(Dice.GetDie(6).NumberOfRolls, 6),
+                new Tuple<int, int>(Dice.GetDie(8).NumberOfRolls, 8),
+                new Tuple<int, int>(Dice.GetDie(10).NumberOfRolls, 10),
+                new Tuple<int, int>(Dice.GetDie(12).NumberOfRolls, 12),
+                new Tuple<int, int>(Dice.GetDie(20).NumberOfRolls, 20),
+                new Tuple<int, int>(Dice.GetDie(100).NumberOfRolls, 100),
             };
             foreach (var item in items)
             {

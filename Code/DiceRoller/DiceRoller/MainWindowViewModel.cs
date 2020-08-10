@@ -104,6 +104,7 @@ namespace DiceRoller
             foreach (var die in Dice)
             {
                 die.NumberOfRolls = 0;
+                die.Modifier = 0;
             }
         }
 

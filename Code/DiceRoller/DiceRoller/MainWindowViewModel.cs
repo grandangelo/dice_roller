@@ -209,16 +209,16 @@ namespace DiceRoller
             for (int i = 0; i < numberOfRolls; i++)
             {
                 var extraction = _r.Next(1, maxValue + 1);
-                var totalModifier = applyAll ? modifier * numberOfRolls : modifier;
-                dieRoll.Add(extraction + totalModifier);
+                dieRoll.Add(extraction);
             }
             if (dieRoll.Count != 0)
             {
+                int totalModifier = applyAll ? modifier * numberOfRolls : modifier;
                 string entry = numberOfRolls == 1 ?
-                    $"D{maxValue}: {string.Join(", ", dieRoll)}." :
-                    $"D{maxValue}: {string.Join(", ", dieRoll)}. Sum {dieRoll.Sum()}";
+                    $"D{maxValue}: {string.Join(", ", dieRoll)}{(totalModifier == 0 ? string.Empty : $" + {totalModifier}.")}" :
+                    $"D{maxValue}: {string.Join(", ", dieRoll)} + {totalModifier}. Sum {dieRoll.Sum() + totalModifier}";
                 extractions.Add(entry);
-                _totalSum += dieRoll.Sum();
+                _totalSum += dieRoll.Sum() + totalModifier;
             }
         }
         #endregion

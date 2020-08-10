@@ -187,28 +187,30 @@ namespace DiceRoller
         private void RollDice()
         {
             _extractions.Clear();
-            var items = new List<Tuple<int, int>>()
+            var items = new List<Tuple<int, int, bool, int>>()
             {
-                new Tuple<int, int>(Dice.GetDie(4).NumberOfRolls, 4),
-                new Tuple<int, int>(Dice.GetDie(6).NumberOfRolls, 6),
-                new Tuple<int, int>(Dice.GetDie(8).NumberOfRolls, 8),
-                new Tuple<int, int>(Dice.GetDie(10).NumberOfRolls, 10),
-                new Tuple<int, int>(Dice.GetDie(12).NumberOfRolls, 12),
-                new Tuple<int, int>(Dice.GetDie(20).NumberOfRolls, 20),
-                new Tuple<int, int>(Dice.GetDie(100).NumberOfRolls, 100),
+                new Tuple<int, int, bool, int>(Dice.GetDie(4).NumberOfRolls, 4, Dice.GetDie(4).AppyModifierAtEachRoll, Dice.GetDie(4).Modifier),
+                new Tuple<int, int, bool, int>(Dice.GetDie(6).NumberOfRolls, 6, Dice.GetDie(6).AppyModifierAtEachRoll, Dice.GetDie(6).Modifier),
+                new Tuple<int, int, bool, int>(Dice.GetDie(8).NumberOfRolls, 8, Dice.GetDie(8).AppyModifierAtEachRoll, Dice.GetDie(8).Modifier),
+                new Tuple<int, int, bool, int>(Dice.GetDie(10).NumberOfRolls, 10, Dice.GetDie(10).AppyModifierAtEachRoll, Dice.GetDie(10).Modifier),
+                new Tuple<int, int, bool, int>(Dice.GetDie(12).NumberOfRolls, 12, Dice.GetDie(12).AppyModifierAtEachRoll, Dice.GetDie(12).Modifier),
+                new Tuple<int, int, bool, int>(Dice.GetDie(20).NumberOfRolls, 20, Dice.GetDie(20).AppyModifierAtEachRoll, Dice.GetDie(20).Modifier),
+                new Tuple<int, int, bool, int>(Dice.GetDie(100).NumberOfRolls, 100, Dice.GetDie(100).AppyModifierAtEachRoll, Dice.GetDie(100).Modifier),
             };
             foreach (var item in items)
             {
-                RollDie(item.Item1, item.Item2, ref _extractions);
+                RollDie(item.Item1, item.Item2, item.Item3, item.Item4, ref _extractions);
             }
         }
 
-        private void RollDie(int numberOfRolls, int maxValue, ref List<string> extractions)
+        private void RollDie(int numberOfRolls, int maxValue, bool applyAll, int modifier, ref List<string> extractions)
         {
             List<int> dieRoll = new List<int>();
             for (int i = 0; i < numberOfRolls; i++)
             {
-                dieRoll.Add(_r.Next(1, maxValue + 1));
+                var extraction = _r.Next(1, maxValue + 1);
+                var totalModifier = applyAll ? modifier * numberOfRolls : modifier;
+                dieRoll.Add(extraction + totalModifier);
             }
             if (dieRoll.Count != 0)
             {

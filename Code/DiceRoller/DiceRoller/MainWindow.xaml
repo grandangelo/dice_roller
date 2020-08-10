@@ -44,13 +44,14 @@
                 <DataTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition/>
@@ -79,21 +80,30 @@
                                                   RelativeSource={RelativeSource Mode=FindAncestor,
                                                                                  AncestorType={x:Type Window}}}"
                                 CommandParameter="{Binding MaxDieValueString}"/>
+                        <CheckBox Grid.Row="0"
+                                  Grid.Column="4"
+                                  Margin="8 0 0 0"
+                                  HorizontalContentAlignment="Center"
+                                  Content="Apply All"
+                                  IsChecked="{Binding AppyModifierAtEachRoll}"/>
                         <Button Grid.Row="0"
-                                Grid.Column="4"
+                                Grid.Column="5"
+                                FontSize="12"
                                 Content="-"
                                 Command="{Binding Path=DataContext.DecreaseModifierCommand, 
                                                   RelativeSource={RelativeSource Mode=FindAncestor,
                                                                                  AncestorType={x:Type Window}}}"
                                 CommandParameter="{Binding MaxDieValueString}"/>
                         <TextBox Grid.Row="0"
-                                 Grid.Column="5"
+                                 Grid.Column="6"
                                  FontWeight="Normal"
+                                 FontSize="12"
                                  IsReadOnly="True"
                                  Text="{Binding Modifier}"/>
                         <Button Grid.Row="0"
-                                Grid.Column="6"
+                                Grid.Column="7"
                                 Content="+"
+                                FontSize="12"
                                 Command="{Binding Path=DataContext.IncreaseModifierCommand, 
                                                   RelativeSource={RelativeSource Mode=FindAncestor,
                                                                                  AncestorType={x:Type Window}}}"

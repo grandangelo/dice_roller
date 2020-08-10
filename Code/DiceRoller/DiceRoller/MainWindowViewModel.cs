@@ -24,7 +24,9 @@ namespace DiceRoller
         public string Result { get => _result; set { if (value == _result) return; _result = value;  OnPropertyChanged(); } }
         public ObservableCollection<Die> Dice { get => _dice; set { if (value == _dice) return; _dice = value; OnPropertyChanged(); } }
         public ICommand DecreaseDiceCommand { get; set; }
+        public ICommand DecreaseModifierCommand { get; set; }
         public ICommand IncreaseDiceCommand { get; set; }
+        public ICommand IncreaseModifierCommand { get; set; }
         public ICommand ResetCommand { get; set; }
         public ICommand RollCommand { get; set; }
         #endregion
@@ -45,7 +47,9 @@ namespace DiceRoller
                 new Die(100, "D100"),
             };
             DecreaseDiceCommand = new RelayCommand(DecreaseDiceNumber);
+            DecreaseModifierCommand = new RelayCommand(DecreaseModifier);
             IncreaseDiceCommand = new RelayCommand(IncreaseDiceNumber);
+            IncreaseModifierCommand = new RelayCommand(IncreaseModifier);
             ResetCommand = new RelayCommand(Reset);
             RollCommand = new RelayCommand(Roll);
             Result = "No result.";
@@ -74,11 +78,25 @@ namespace DiceRoller
             ModifyDiceNumber(selectedDice, decreaseDice);
         }
 
+        private void DecreaseModifier(object parameters)
+        {
+            string selectedDice = (string)parameters;
+            static int decreaseModifier(int currentValue) => currentValue - 1;
+            ModifyModifier(selectedDice, decreaseModifier);
+        }
+
         private void IncreaseDiceNumber(object parameters)
         {
             string selectedDice = (string)parameters;
             static int increaseDice(int currentValue) => currentValue + 1;
             ModifyDiceNumber(selectedDice, increaseDice);
+        }
+
+        private void IncreaseModifier(object parameters)
+        {
+            string selectedDice = (string)parameters;
+            static int increaseModifier(int currentValue) => currentValue + 1;
+            ModifyModifier(selectedDice, increaseModifier);
         }
 
         private void Reset(object parameters)
@@ -136,6 +154,36 @@ namespace DiceRoller
             }
         }
 
+        private void ModifyModifier(string die, Func<int, int> function)
+        {
+            switch (die.ToLower())
+            {
+                case "4":
+                    Dice.GetDie(4).Modifier = function(Dice.GetDie(4).Modifier);
+                    break;
+                case "6":
+                    Dice.GetDie(6).Modifier = function(Dice.GetDie(6).Modifier);
+                    break;
+                case "8":
+                    Dice.GetDie(8).Modifier = function(Dice.GetDie(8).Modifier);
+                    break;
+                case "10":
+                    Dice.GetDie(10).Modifier = function(Dice.GetDie(10).Modifier);
+                    break;
+                case "12":
+                    Dice.GetDie(12).Modifier = function(Dice.GetDie(12).Modifier);
+                    break;
+                case "20":
+                    Dice.GetDie(20).Modifier = function(Dice.GetDie(20).Modifier);
+                    break;
+                case "100":
+                    Dice.GetDie(100).Modifier = function(Dice.GetDie(100).Modifier);
+                    break;
+                default:
+                    throw new Exception($"Invalid dice: {die}.");
+            }
+        }
+
         private void RollDice()
         {
             _extractions.Clear();
@@ -164,7 +212,10 @@ namespace DiceRoller
             }
             if (dieRoll.Count != 0)
             {
-                extractions.Add($"D{maxValue}: {string.Join(", ", dieRoll)}. Sum {dieRoll.Sum()}");
+                string entry = numberOfRolls == 1 ?
+                    $"D{maxValue}: {string.Join(", ", dieRoll)}." :
+                    $"D{maxValue}: {string.Join(", ", dieRoll)}. Sum {dieRoll.Sum()}";
+                extractions.Add(entry);
                 _totalSum += dieRoll.Sum();
             }
         }

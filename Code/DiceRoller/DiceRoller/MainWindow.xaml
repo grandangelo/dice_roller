@@ -50,6 +50,7 @@
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
+                            <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition/>
@@ -75,6 +76,25 @@
                                 Grid.Column="3"
                                 Content="+"
                                 Command="{Binding Path=DataContext.IncreaseDiceCommand, 
+                                                  RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                 AncestorType={x:Type Window}}}"
+                                CommandParameter="{Binding MaxDieValueString}"/>
+                        <Button Grid.Row="0"
+                                Grid.Column="4"
+                                Content="-"
+                                Command="{Binding Path=DataContext.DecreaseModifierCommand, 
+                                                  RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                 AncestorType={x:Type Window}}}"
+                                CommandParameter="{Binding MaxDieValueString}"/>
+                        <TextBox Grid.Row="0"
+                                 Grid.Column="5"
+                                 FontWeight="Normal"
+                                 IsReadOnly="True"
+                                 Text="{Binding Modifier}"/>
+                        <Button Grid.Row="0"
+                                Grid.Column="6"
+                                Content="+"
+                                Command="{Binding Path=DataContext.IncreaseModifierCommand, 
                                                   RelativeSource={RelativeSource Mode=FindAncestor,
                                                                                  AncestorType={x:Type Window}}}"
                                 CommandParameter="{Binding MaxDieValueString}"/>

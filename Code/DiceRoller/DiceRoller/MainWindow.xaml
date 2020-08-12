@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:DiceRoller"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="600">
+        Title="Dice Roller" Height="600" Width="600">
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>

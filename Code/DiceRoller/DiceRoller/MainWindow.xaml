@@ -3,10 +3,171 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DiceRoller"
+        xmlns:vm="clr-namespace:DiceRoller"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="600">
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <Style TargetType="Button" BasedOn="{StaticResource MahApps.Styles.Button}">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style TargetType="TextBox" BasedOn="{StaticResource MahApps.Styles.TextBox}">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
     <Grid>
-
+        <Grid.Resources>
+            <Style TargetType="RowDefinition">
+                <Setter Property="Height" Value="50"/>
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="292"/>
+            <RowDefinition/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <TextBox Grid.Row="0"
+                 Grid.Column="0"
+                 FontSize="14"
+                 FontWeight="Normal"
+                 FontStyle="Italic"
+                 BorderThickness="0"
+                 Text="Type"/>
+        <TextBox Grid.Row="0"
+                 Grid.Column="1"
+                 Grid.ColumnSpan="3"
+                 FontSize="14"
+                 FontWeight="Normal"
+                 FontStyle="Italic"
+                 BorderThickness="0"
+                 Text="Number of rolls"/>
+        <TextBox Grid.Row="0"
+                 Grid.Column="4"
+                 Grid.ColumnSpan="4"
+                 FontSize="14"
+                 FontWeight="Normal"
+                 FontStyle="Italic"
+                 BorderThickness="0"
+                 Text="Modifier"/>
+        <ListView Grid.Row="1"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="8"
+                  ItemsSource="{Binding Dice}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderThickness="0 0 0 1"
+                            BorderBrush="{StaticResource MahApps.Brushes.Border.NonActive}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBox Grid.Row="0"
+                                     Grid.Column="0"
+                                     BorderThickness="0"
+                                     FontWeight="Normal"
+                                     IsReadOnly="True"
+                                     Text="{Binding Name, Mode=OneWay}"/>
+                            <Button Grid.Row="0"
+                                    Grid.Column="1"
+                                    BorderThickness="0"
+                                    Content="-"
+                                    Command="{Binding Path=DataContext.DecreaseDiceCommand, 
+                                                      RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                     AncestorType={x:Type Window}}}"
+                                    CommandParameter="{Binding MaxDieValueString}"/>
+                            <TextBox Grid.Row="0"
+                                     Grid.Column="2"
+                                     BorderThickness="0"
+                                     FontWeight="Normal"
+                                     IsReadOnly="True"
+                                     Text="{Binding NumberOfRolls}"/>
+                            <Button Grid.Row="0"
+                                    Grid.Column="3"
+                                    BorderThickness="0"
+                                    Content="+"
+                                    Command="{Binding Path=DataContext.IncreaseDiceCommand, 
+                                                      RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                     AncestorType={x:Type Window}}}"
+                                    CommandParameter="{Binding MaxDieValueString}"/>
+                            <CheckBox Grid.Row="0"
+                                      Grid.Column="4"
+                                      Margin="8 0 0 0"
+                                      HorizontalContentAlignment="Center"
+                                      Content="Apply All"
+                                      IsChecked="{Binding AppyModifierAtEachRoll}"/>
+                            <Button Grid.Row="0"
+                                    Grid.Column="5"
+                                    BorderThickness="0"
+                                    FontSize="12"
+                                    Content="-"
+                                    Command="{Binding Path=DataContext.DecreaseModifierCommand, 
+                                                      RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                     AncestorType={x:Type Window}}}"
+                                    CommandParameter="{Binding MaxDieValueString}"/>
+                            <TextBox Grid.Row="0"
+                                     Grid.Column="6"
+                                     BorderThickness="0"
+                                     FontWeight="Normal"
+                                     FontSize="12"
+                                     IsReadOnly="True"
+                                     Text="{Binding Modifier}"/>
+                            <Button Grid.Row="0"
+                                    Grid.Column="7"
+                                    BorderThickness="0"
+                                    Content="+"
+                                    FontSize="12"
+                                    Command="{Binding Path=DataContext.IncreaseModifierCommand, 
+                                                      RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                     AncestorType={x:Type Window}}}"
+                                    CommandParameter="{Binding MaxDieValueString}"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Button Grid.Row="2"
+                Grid.Column="0"
+                Grid.ColumnSpan="5"
+                Content="Roll"
+                Command="{Binding RollCommand}"/>
+        <Button Grid.Row="2"
+                Grid.Column="5"
+                Grid.ColumnSpan="3"
+                Content="Reset"
+                Command="{Binding ResetCommand}"/>
+        <TextBox Grid.Row="3"
+                 Grid.Column="0"
+                 Grid.ColumnSpan="8"
+                 FontSize="16"
+                 FontWeight="Normal"
+                 Text="{Binding Result}"
+                 VerticalScrollBarVisibility="Auto"/>
     </Grid>
 </Window>
